@@ -12,8 +12,12 @@ class bma180 : public i2c_accelerometer
         bma180();
         ~bma180();
         void read_sensor_data();
+        
+        // A funky way to handle optional arguments
         void begin(byte dev_addr, boolean wire_begin);
-    
+        void begin(byte dev_addr);    
+        void begin();
+
     protected:
         // 2 byte endian marker (ie single int)
         // 6 byte buffer for saving data read from the device (ie 3 ints)

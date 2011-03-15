@@ -10,11 +10,21 @@ bma180::~bma180()
 {
 }
 
-void bma180::begin(byte dev_addr=0x40, boolean wire_begin=true)
+// Funky way to handle default arguments
+void bma180::begin(byte dev_addr, boolean wire_begin)
 {
     int last_data_buffer[5] = {0x8081, 0, 0, 0, 0};
     i2c_accelerometer::begin(dev_addr, wire_begin);
 }
+void bma180::begin(byte dev_addr=0x40)
+{
+    bma180::begin(dev_addr, true);
+}
+void bma180::begin()
+{
+    bma180::begin(0x40, true);
+}
+
 
 void bma180::read_sensor_data()
 {

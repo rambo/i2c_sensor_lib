@@ -10,7 +10,7 @@ i2c_sensor::~i2c_sensor()
 {
 }
 
-void i2c_sensor::begin(byte dev_addr=0x40, boolean wire_begin=true)
+void i2c_sensor::begin(byte dev_addr, boolean wire_begin)
 {
     device_address = dev_addr;
     if (wire_begin)

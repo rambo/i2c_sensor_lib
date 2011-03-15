@@ -10,7 +10,7 @@ void setup()
     Serial.flush();
     
     // TODO: initialize the sensor class
-    //sensor.begin();
+    sensor.begin();
     
     // Wait a moment so that everything settles.
     delay(10);
@@ -19,7 +19,8 @@ void setup()
 
 void loop()
 {
-  
+    sensor.read_sensor_data();
+    
     // 4Hz main loop
     delay(250);
     Serial.print("mSec since boot: ");

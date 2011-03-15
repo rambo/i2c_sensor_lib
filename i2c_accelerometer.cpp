@@ -10,7 +10,7 @@ i2c_accelerometer::~i2c_accelerometer()
 {
 }
 
-void i2c_accelerometer::begin(byte dev_addr=0x40, boolean wire_begin=true)
+void i2c_accelerometer::begin(byte dev_addr, boolean wire_begin)
 {
     i2c_sensor::begin(dev_addr, wire_begin);
 }
