@@ -17,6 +17,8 @@ class i2c_accelerometer : public i2c_sensor
         i2c_accelerometer();
         ~i2c_accelerometer();
         void begin(byte dev_addr, boolean wire_begin);
+        void smooth();
+        void get_last_smoothed(int *target);
     
     protected:
         SimpleFIFO<int,I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE> smoothing_buffer[3]; // One buffer for each channel
@@ -24,7 +26,6 @@ class i2c_accelerometer : public i2c_sensor
         int last_data_buffer[3];
         int smoothed_buffer[3];
         void push_to_smoothing_buffer(int val_x, int val_y, int val_z);
-        void smooth();
         
 };
 

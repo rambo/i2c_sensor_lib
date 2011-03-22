@@ -19,12 +19,17 @@ void i2c_sensor::begin(byte dev_addr, boolean wire_begin)
     }
 }
 
-void i2c_sensor::get_last_raw(byte *target)
+void i2c_sensor::get_last_raw(void *target)
 {
-    // PONDER: Will this actually work for an array or is memcopy magic needed ?
-    *target = last_data_buffer;
+    memcpy(&target, &last_data_buffer, sizeof(&target));
 }
 
+
+void i2c_sensor::get_last_smoothed(void *target)
+{
+    // This seems to give all zeros
+    memcpy(&target, &smoothed_buffer, sizeof(&target));
+}
 
 void i2c_sensor::read_sensor_data()
 {
