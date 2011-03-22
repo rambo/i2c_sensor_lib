@@ -4,6 +4,12 @@
 #include <WProgram.h> 
 #include "i2c_sensor.h"
 #include <Wire.h>
+#include <SimpleFIFO.h> 
+
+
+#ifndef I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE
+#define I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE 5
+#endif
 
 class i2c_accelerometer : public i2c_sensor
 {
@@ -13,8 +19,13 @@ class i2c_accelerometer : public i2c_sensor
         void begin(byte dev_addr, boolean wire_begin);
     
     protected:
-        int smooth_buffer[5][3];
+        SimpleFIFO<int,I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE> smoothing_buffer[3]; // One buffer for each channel
+        //int smoothing_buffer[I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE][3];
         int last_data_buffer[3];
+        int smoothed_buffer[3];
+        void push_to_smoothing_buffer(int val_x, int val_y, int val_z);
+        void smooth();
+        
 };
 
 #endif

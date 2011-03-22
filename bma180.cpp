@@ -42,16 +42,10 @@ void bma180::read_sensor_data()
     {
         *(buff++) = Wire.receive();
     }
-    
     // Calculate checksum
     last_data_buffer[4] = last_data_buffer[1] + last_data_buffer[2] + last_data_buffer[3];
     
-    // FIXME: Use circular buffer
-    byte buffer_i = 0;
-    // Put data to buffer
-    smooth_buffer[buffer_i][0] = last_data_buffer[1] >> 2;
-    smooth_buffer[buffer_i][1] = last_data_buffer[2] >> 2;
-    smooth_buffer[buffer_i][2] = last_data_buffer[3] >> 2;
+    i2c_accelerometer::push_to_smoothing_buffer(last_data_buffer[1] >> 2, last_data_buffer[2] >> 2, last_data_buffer[3] >> 2);
 }
 
 

@@ -1,5 +1,8 @@
 // If this is not here we get compile error on i2c_sensor.h
 #include <Wire.h>
+// If this is not here we get a compile error on i2c_accelerometer.h
+#include <SimpleFIFO.h> 
+
 #include "bma180.h"
 
 bma180 sensor;
