@@ -1,1 +1,3 @@
 Looking into inheritance on Arduino, trying to make a sensible class hierachy for handling data reading, smoothing etc.
+
+GAH: The automagical context-thing bites again, TODO: move this under my personal context when I have the time.
