@@ -34,3 +34,16 @@ void i2c_sensor::get_last_smoothed(void *target)
 void i2c_sensor::read_sensor_data()
 {
 }
+
+void i2c_sensor::readFrom(byte address, byte num, byte *buff) {
+  Wire.beginTransmission(device_address); //start transmission to device 
+  Wire.send(address);        //sends address to read from
+  Wire.endTransmission(); //end transmission
+
+  Wire.requestFrom(device_address, num);    // request num bytes from device
+  num = Wire.available(); //device may send less than requested (abnormal)
+  while(num-- > 0) {
+    *(buff++) = Wire.receive(); // receive a byte
+  }
+}
+

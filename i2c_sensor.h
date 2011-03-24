@@ -15,6 +15,7 @@ class i2c_sensor
         void get_last_raw(void *target);
         void get_last_smoothed(void *target);
         void get_buffer(void *target);
+        void readFrom(byte address, byte num, byte *buff);
 
     protected:
         byte device_address;
