@@ -16,6 +16,14 @@ void bma180::begin(byte dev_addr, boolean wire_begin)
     int last_data_buffer[5] = {0x8081, 0, 0, 0, 0};
     i2c_accelerometer::begin(dev_addr, wire_begin);
     // TODO: Read the control reg values so our mask ops give expected results
+    // TODO: Make a single pointer-array and use read_many
+    bma180::read(0x20, (byte*) bw_tcs);
+    bma180::read(0x21, (byte*) ctrl_reg_3);
+
+    Serial.print("bw_tcs: ");
+    Serial.println(bw_tcs, BIN);
+    Serial.print("ctrl_reg_3: ");
+    Serial.println(ctrl_reg_3, BIN);
 }
 void bma180::begin(byte dev_addr=0x40)
 {
@@ -28,17 +36,21 @@ void bma180::begin()
 
 void bma180::set_ee_w(boolean enable)
 {
+    /*
     Wire.beginTransmission(device_address);
     Wire.send(0x0d);
+    */
     if (enable)
     {
-        Wire.send(B00010000);
+        //Wire.send(B00010000);
+        bma180::write(0x0d, B00010000);
     }
     else
     {
-        Wire.send(B00000000);
+        //Wire.send(B00000000);
+        bma180::write(0x0d, B00010000);
     }
-    Wire.endTransmission();
+    //Wire.endTransmission();
     ee_w = enable;
 }
 
@@ -50,10 +62,14 @@ void bma180::set_ctrl_reg_3()
     {
          bma180::set_ee_w(true);
     }
+    /*
     Wire.beginTransmission(device_address);
     Wire.send(0x21);
     Wire.send(ctrl_reg_3);
     Wire.endTransmission();
+    */
+    bma180::write(0x21, ctrl_reg_3);
+
 }
 void bma180::set_bw_tcs()
 {
@@ -61,10 +77,13 @@ void bma180::set_bw_tcs()
     {
          bma180::set_ee_w(true);
     }
+    /*
     Wire.beginTransmission(device_address);
     Wire.send(0x20);
     Wire.send(bw_tcs);
     Wire.endTransmission();
+    */
+    bma180::write(0x20, bw_tcs);
 }
 
 void bma180::set_bandwidth(int bw)
@@ -105,9 +124,6 @@ void bma180::set_new_data_interrupt(boolean enable)
 {
     if (enable)
     {
-        // set adv_int too
-        //ctrl_reg_3 |= B00000110;
-        // 
         ctrl_reg_3 |= B00000010;
     }
     else

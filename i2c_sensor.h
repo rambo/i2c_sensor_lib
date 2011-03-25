@@ -17,6 +17,11 @@ class i2c_sensor
         void get_buffer(void *target);
         void readFrom(byte address, byte num, byte *buff);
 
+        boolean read(byte address, byte *target);
+        boolean read_many(byte address, byte num, byte *target);
+        boolean write(byte address, byte value);
+        boolean write_many(byte address, byte num, byte *source);
+
     protected:
         byte device_address;
         // PONDER: These might be better not be defined here (if overloading is b0rked or something
