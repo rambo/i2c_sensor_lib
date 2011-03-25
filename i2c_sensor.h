@@ -15,18 +15,25 @@ class i2c_sensor
         void get_last_raw(void *target);
         void get_last_smoothed(void *target);
         void get_buffer(void *target);
-        void readFrom(byte address, byte num, byte *buff);
 
+        // A Very shorthand helper for reading single byte (NOTE: does not do error-checking!)
+        byte read(byte address);
+        // Read single byte to a referred target (calls read_many internally)
         boolean read(byte address, byte *target);
+        // Read N bytes to a target (usually an array)
         boolean read_many(byte address, byte num, byte *target);
+        // Helper to write a single byte value (calls write_many internally)
         boolean write(byte address, byte value);
+        // Write N values from a target (usually an array)
         boolean write_many(byte address, byte num, byte *source);
+
+        void dump_registers(byte addr_start, byte addr_end);
 
     protected:
         byte device_address;
         // PONDER: These might be better not be defined here (if overloading is b0rked or something
         int smoothed_buffer;
-        int last_data_buffer;
+        volatile int last_data_buffer;
 
 };
 
