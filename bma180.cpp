@@ -15,14 +15,19 @@ void bma180::begin(byte dev_addr, boolean wire_begin)
     i2c_accelerometer::begin(dev_addr, wire_begin);
 
     // Reset the device to get it to "known" state
+    bw_tcs = ctrl_reg_3 = offset_lsb1 = 0;
     bma180::write(0x10, 0xB6);
-    delayMicroseconds(10);
+    delayMicroseconds(20);
     
     // TODO: Make a single pointer-array and use read_many to access consequtive registers ?
     bma180::read(0x20, &bw_tcs);
     bma180::read(0x21, &ctrl_reg_3);
     // TODO: Use read_many instead to avoid drilling through the methods ??
+    Serial.print("bma180::begin(): offset_lsb1 before: B");
+    Serial.println(offset_lsb1, BIN);
     bma180::read(0x35, &offset_lsb1);
+    Serial.print("bma180::begin(): offset_lsb1 after: B");
+    Serial.println(offset_lsb1, BIN);
 }
 // Funky way to handle default arguments
 void bma180::begin(byte dev_addr)
@@ -77,12 +82,10 @@ void bma180::write_offset_lsb1()
 
 void bma180::set_range(byte range)
 {
-    /*
     Serial.print("range: B");
     Serial.println(range, BIN);
-    Serial.print("offset_lsb1 before: B");
+    Serial.print("bma180::set_range(): offset_lsb1 before: B");
     Serial.println(offset_lsb1, BIN);
-    */
     switch (range)
     {
         case B000: // 1g
@@ -99,20 +102,20 @@ void bma180::set_range(byte range)
           Serial.println(range, BIN);
           return;
     }
-    /*
-    Serial.print("offset_lsb1 after: B");
+    Serial.print("bma180::set_range(): offset_lsb1 after: B");
     Serial.println(offset_lsb1, BIN);
-    */
     bma180::write_offset_lsb1();
 }
 
 void bma180::set_bandwidth(byte bw)
 {
+    /*
     Serial.print("bw: B");
     Serial.println(bw, BIN);
 
     Serial.print("bw_tcs before: B");
     Serial.println(bw_tcs, BIN);
+    */
     switch (bw)
     {
         case B0000: // 10Hz
@@ -132,9 +135,10 @@ void bma180::set_bandwidth(byte bw)
           Serial.println(bw, BIN);
           return;
     }
+    /*
     Serial.print("bw_tcs after: B");
     Serial.println(bw_tcs, BIN);
-
+    */
     bma180::write_bw_tcs();
     delayMicroseconds(10);
 }
@@ -163,10 +167,8 @@ void bma180::set_new_data_interrupt(boolean enable)
 
 void bma180::set_smp_skip(boolean enable)
 {
-    /*
-    Serial.print("offset_lsb1 before: B");
+    Serial.print("bma180::set_smp_skip(): offset_lsb1 before: B");
     Serial.println(offset_lsb1, BIN);
-    */
     if (enable)
     {
         offset_lsb1 |= B00000001;
@@ -175,10 +177,8 @@ void bma180::set_smp_skip(boolean enable)
     {
         offset_lsb1 &= B11111110;
     }
-    /*
-    Serial.print("offset_lsb1 after: B");
+    Serial.print("bma180::set_smp_skip(): offset_lsb1 after: B");
     Serial.println(offset_lsb1, BIN);
-    */
     bma180::write_offset_lsb1();
 }
 

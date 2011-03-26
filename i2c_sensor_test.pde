@@ -49,11 +49,11 @@ void setup()
     sensor.dump_registers(0x32, 0x37);
 
     Serial.println("Setting config variables");
-    sensor.set_smp_skip(true);
-    delay(10);
     sensor.set_bandwidth(B0000);
     delay(10);
     sensor.set_range(B010);
+    delay(10);
+    sensor.set_smp_skip(true);
     delay(10);
     sensor.set_new_data_interrupt(true);
     delay(10);
