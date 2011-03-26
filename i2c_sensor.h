@@ -12,9 +12,8 @@ class i2c_sensor
         ~i2c_sensor();
         void begin(byte dev_addr, boolean wire_begin);
         virtual void read_sensor_data();
-        void get_last_raw(void *target);
-        void get_last_smoothed(void *target);
-        void get_buffer(void *target);
+        virtual void get_last_raw(int *target);
+        virtual void get_last_smoothed(int *target);
 
         // A Very shorthand helper for reading single byte (NOTE: does not do error-checking!)
         byte read(byte address);
@@ -33,6 +32,7 @@ class i2c_sensor
         byte device_address;
         // PONDER: These might be better not be defined here (if overloading is b0rked or something
         int smoothed_buffer;
+        // This probably does not need to be volatile since we can't do I2C operations inside interrupts anyway...
         volatile int last_data_buffer;
 
 };

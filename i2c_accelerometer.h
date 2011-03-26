@@ -22,10 +22,12 @@ class i2c_accelerometer : public i2c_sensor
         void get_last_smoothed(int *target);
     
     protected:
-        SimpleFIFO<int,I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE> smoothing_buffer[3]; // One buffer for each channel
-        //int smoothing_buffer[I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE][3];
+        // The SimpleFIFO is volatile, I wonder if I should make a non-volatile version too ?
+        SimpleFIFO<int,I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE> smoothing_buffer[3]; // One SimpleFIFO for each channel
+        // This probably does not need to be volatile since we can't do I2C operations inside interrupts anyway...
         volatile int last_data_buffer[3];
         int smoothed_buffer[3];
+        // PONDER: define this (and the simplefifo above) in parent class too ?
         void push_to_smoothing_buffer(int val_x, int val_y, int val_z);
         
 };

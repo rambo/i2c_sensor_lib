@@ -19,17 +19,12 @@ void i2c_sensor::begin(byte dev_addr, boolean wire_begin)
     }
 }
 
-// TODO:Doublecheck my pointer logic
-
-void i2c_sensor::get_last_raw(void *target)
+void i2c_sensor::get_last_raw(int *target)
 {
-//    memcpy(target, &last_data_buffer, sizeof(*target));
 }
-void i2c_sensor::get_last_smoothed(void *target)
+void i2c_sensor::get_last_smoothed(int *target)
 {
-//    memcpy(target, &smoothed_buffer, sizeof(*target));
 }
-
 void i2c_sensor::read_sensor_data()
 {
 }
