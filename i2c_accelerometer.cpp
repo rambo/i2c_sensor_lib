@@ -46,7 +46,7 @@ void i2c_accelerometer::smooth()
     // Naive smoothing for now
     byte d = smoothing_buffer[0].count();
     byte div = d;
-    long temp_buffer[3] = {0, 0, 0};
+    long temp_buffer[3] = {smoothed_buffer[0], smoothed_buffer[1], smoothed_buffer[2]};
     while (d-- > 0)
     {
         temp_buffer[0] += smoothing_buffer[0].dequeue(); 

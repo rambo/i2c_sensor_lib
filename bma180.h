@@ -20,6 +20,7 @@ class bma180 : public i2c_accelerometer
         void set_new_data_interrupt(boolean enable);
         void set_smp_skip(boolean enable);
         void set_bandwidth(byte bw);
+        void set_range(byte range);
 
     protected:
         boolean ee_w;

@@ -14,6 +14,11 @@ bma180::~bma180()
 void bma180::begin(byte dev_addr, boolean wire_begin)
 {
     i2c_accelerometer::begin(dev_addr, wire_begin);
+
+    // Reset the device to get it to "known" state
+    bma180::write(0x10, 0xB6);
+    delayMicroseconds(10);
+    
     // TODO: Make a single pointer-array and use read_many to access consequtive registers
     bma180::read(0x20, &bw_tcs);
     bma180::read(0x21, &ctrl_reg_3);
@@ -37,7 +42,7 @@ void bma180::set_ee_w(boolean enable)
     }
     else
     {
-        bma180::write(0x0d, B00010000);
+        bma180::write(0x0d, B00000000);
     }
     ee_w = enable;
 }
@@ -70,15 +75,47 @@ void bma180::write_offset_lsb1()
 }
 
 
-// TODO: Use a byte value to conserve memory
+void bma180::set_range(byte range)
+{
+    Serial.print("range: B");
+    Serial.println(range, BIN);
+    Serial.print("(range << 1 | B11110001)=B");
+    Serial.println((range << 1 | B11110001), BIN);
+
+    Serial.print("offset_lsb1 before: B");
+    Serial.println(offset_lsb1, BIN);
+    switch (range)
+    {
+        case B000: // 1g
+        case B001: // 1.5g
+        case B010: // 2g
+        case B011: // 3g
+        case B100: // 4g
+        case B101: // 8g
+        case B110: // 16g
+            // This will not work, thing about it when awake
+            //offset_lsb1 |= range << 1;
+            // Won't work either.
+            offset_lsb1 &= (range << 1 | B11110001);
+          break;
+        default:
+          Serial.print("Invalid value B");
+          Serial.println(range, BIN);
+          return;
+    }
+    Serial.print("offset_lsb1 after: B");
+    Serial.println(offset_lsb1, BIN);
+
+    bma180::write_offset_lsb1();
+}
+
 void bma180::set_bandwidth(byte bw)
 {
-    // Shift the bw mask so we don't need to type all them dam bits
-    if (bw <= 15)
-    {
-        bw = bw << 4;
-    }
-    //byte bw_tcs_mask = bw & B00001111
+    Serial.print("bw: B");
+    Serial.println(bw, BIN);
+
+    Serial.print("bw_tcs before: B");
+    Serial.println(bw_tcs, BIN);
     switch (bw)
     {
         case B0000: // 10Hz
@@ -91,17 +128,27 @@ void bma180::set_bandwidth(byte bw)
         case B0111: // 1200Hz
         case B1000: // High-pass: 1Hz
         case B1001: // Band-pass: 0.2Hz - 300Hz
-            bw_tcs &= (bw & B00001111);
+            // This will not work, thing about it when awake
+            //bw_tcs |= bw << 4;
+            bw_tcs &= (bw << 4 | B00001111);
           break;
         default:
+          Serial.print("Invalid value B");
+          Serial.println(bw, BIN);
           return;
     }
+    Serial.print("bw_tcs after: B");
+    Serial.println(bw_tcs, BIN);
 
     bma180::write_bw_tcs();
+    delayMicroseconds(10);
 }
+
 
 void bma180::set_new_data_interrupt(boolean enable)
 {
+    Serial.print("ctrl_reg_3 before: B");
+    Serial.println(ctrl_reg_3, BIN);
     if (enable)
     {
         ctrl_reg_3 |= B00000010;
@@ -110,11 +157,15 @@ void bma180::set_new_data_interrupt(boolean enable)
     {
         ctrl_reg_3 &= B11111101;
     }
+    Serial.print("ctrl_reg_3 after: B");
+    Serial.println(ctrl_reg_3, BIN);
     bma180::write_ctrl_reg_3();
 }
 
 void bma180::set_smp_skip(boolean enable)
 {
+    Serial.print("offset_lsb1 before: B");
+    Serial.println(offset_lsb1, BIN);
     if (enable)
     {
         offset_lsb1 |= B00000001;
@@ -123,6 +174,8 @@ void bma180::set_smp_skip(boolean enable)
     {
         offset_lsb1 &= B11111110;
     }
+    Serial.print("offset_lsb1 after: B");
+    Serial.println(offset_lsb1, BIN);
     bma180::write_offset_lsb1();
 }
 

@@ -81,8 +81,16 @@ boolean i2c_sensor::read_many(byte address, byte req_num, byte *target)
 
 boolean i2c_sensor::write(byte address, byte value)
 {
-    i2c_sensor::write_many(address, 1, &value);
-    /*
+    //i2c_sensor::write_many(address, 1, &value);
+    Serial.print("writing to dev 0x");
+    Serial.print(device_address, HEX);
+    Serial.print(" reg 0x");
+    Serial.print(address, HEX);
+    Serial.print(" value 0x");
+    Serial.print(value, HEX);
+    Serial.print("\tB");
+    Serial.println(value, BIN);
+
     Wire.beginTransmission(device_address);
     Wire.send(address);
     Wire.send(value);
@@ -94,7 +102,6 @@ boolean i2c_sensor::write(byte address, byte value)
         return false;
     }
     return true;
-    */
 }
 
 boolean i2c_sensor::write_many(byte address, byte num, byte *source)

@@ -29,28 +29,40 @@ void setup()
     Serial.begin(115200);  // start serial for output
     Serial.flush();
     
+    /*
     Serial.print("I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE=");
     Serial.println(I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE, DEC);
-    // TODO: initialize the sensor class
-    
-    Serial.println("Calling sensor.begin()");
-    sensor.begin();
-    Serial.println("sensor.begin() done");
-    sensor.set_bandwidth(B0000);
-    //sensor.set_bandwidth(B0001);
-    delay(50);
-    sensor.set_smp_skip(true);
-    delay(50);
-    sensor.set_new_data_interrupt(true);
-    delay(50);
-
-    sensor.dump_registers(0x20, 0x25);
-    sensor.dump_registers(0x32, 0x37);
+    */
 
     Serial.println("Callign PCintPort::attachInterrupt()");
     pinMode(13, INPUT);
     PCintPort::attachInterrupt(13, &read_bm180_data, RISING);
     Serial.println("PCintPort::attachInterrupt() done");
+
+
+    Serial.println("Calling sensor.begin()");
+    sensor.begin();
+    Serial.println("sensor.begin() done");
+
+    sensor.dump_registers(0x09, 0x0e);
+    sensor.dump_registers(0x20, 0x25);
+    sensor.dump_registers(0x32, 0x37);
+
+    Serial.println("Setting config variables");
+    sensor.set_smp_skip(true);
+    delay(10);
+    sensor.set_bandwidth(B0000);
+    delay(10);
+    sensor.set_range(B011);
+    delay(10);
+    sensor.set_new_data_interrupt(true);
+    delay(10);
+    Serial.println("Setting config variables done");
+
+    sensor.dump_registers(0x09, 0x0e);
+    sensor.dump_registers(0x20, 0x25);
+    sensor.dump_registers(0x32, 0x37);
+
     sensor.read_sensor_data();
 
     
