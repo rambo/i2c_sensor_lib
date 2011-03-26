@@ -53,7 +53,7 @@ void setup()
     delay(10);
     sensor.set_bandwidth(B0000);
     delay(10);
-    sensor.set_range(B011);
+    sensor.set_range(B010);
     delay(10);
     sensor.set_new_data_interrupt(true);
     delay(10);
@@ -77,9 +77,10 @@ void loop()
     if (read_sensor_flag)
     {
         sensor.read_sensor_data();
+        read_sensor_flag = false;
     }
     foo++;
-    if (! (foo % 50))
+    if (! (foo % 100))
     {
         sensor.smooth();
         // Array so no need to cast as pointer
@@ -90,6 +91,6 @@ void loop()
         Serial.print('\t');
         Serial.println(smoothed_data[2], DEC);
     }
-    delay(10);
+    delay(1);
 }
 

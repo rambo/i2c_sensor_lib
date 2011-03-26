@@ -79,8 +79,6 @@ void bma180::set_range(byte range)
 {
     Serial.print("range: B");
     Serial.println(range, BIN);
-    Serial.print("(range << 1 | B11110001)=B");
-    Serial.println((range << 1 | B11110001), BIN);
 
     Serial.print("offset_lsb1 before: B");
     Serial.println(offset_lsb1, BIN);
@@ -96,7 +94,9 @@ void bma180::set_range(byte range)
             // This will not work, thing about it when awake
             //offset_lsb1 |= range << 1;
             // Won't work either.
-            offset_lsb1 &= (range << 1 | B11110001);
+            //offset_lsb1 &= (range << 1 | B11110001);
+            // reg = ( reg & B11110001) | B101 << 1
+            offset_lsb1 = (offset_lsb1 & B11110001) | range << 1;
           break;
         default:
           Serial.print("Invalid value B");
@@ -130,7 +130,9 @@ void bma180::set_bandwidth(byte bw)
         case B1001: // Band-pass: 0.2Hz - 300Hz
             // This will not work, thing about it when awake
             //bw_tcs |= bw << 4;
-            bw_tcs &= (bw << 4 | B00001111);
+            //bw_tcs &= (bw << 4 | B00001111);
+            // reg = ( reg & B11110001) | B101 << 1
+            bw_tcs = (bw_tcs & B00001111) | bw << 4;
           break;
         default:
           Serial.print("Invalid value B");
