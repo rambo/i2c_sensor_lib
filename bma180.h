@@ -12,11 +12,14 @@ class bma180 : public i2c_accelerometer
         bma180();
         ~bma180();
         void read_sensor_data();
-        
-        // A funky way to handle optional arguments
+
+        // Initialize the object and chip        
         void begin(byte dev_addr, boolean wire_begin);
+        // A funky way to handle optional arguments
         void begin(byte dev_addr);    
         void begin();
+        // do a soft-reset for the chip and re-read the config registers
+        void reset();
         void set_new_data_interrupt(boolean enable);
         void set_smp_skip(boolean enable);
         void set_bandwidth(byte bw);

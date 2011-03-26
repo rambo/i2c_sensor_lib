@@ -3,7 +3,6 @@
 // If this is not here we get a compile error on i2c_accelerometer.h
 #include <SimpleFIFO.h> 
 
-#define I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE 128
 #include "bma180.h"
 
 #define DISABLE_PCINT_MULTI_SERVICE

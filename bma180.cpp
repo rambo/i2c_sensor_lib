@@ -13,21 +13,8 @@ bma180::~bma180()
 void bma180::begin(byte dev_addr, boolean wire_begin)
 {
     i2c_accelerometer::begin(dev_addr, wire_begin);
-
-    // Reset the device to get it to "known" state
-    bw_tcs = ctrl_reg_3 = offset_lsb1 = 0;
-    bma180::write(0x10, 0xB6);
-    delayMicroseconds(20);
-    
-    // TODO: Make a single pointer-array and use read_many to access consequtive registers ?
-    bma180::read(0x20, &bw_tcs);
-    bma180::read(0x21, &ctrl_reg_3);
-    // TODO: Use read_many instead to avoid drilling through the methods ??
-    Serial.print("bma180::begin(): offset_lsb1 before: B");
-    Serial.println(offset_lsb1, BIN);
-    bma180::read(0x35, &offset_lsb1);
-    Serial.print("bma180::begin(): offset_lsb1 after: B");
-    Serial.println(offset_lsb1, BIN);
+    // do a soft-reset of the chip
+    bma180::reset();
 }
 // Funky way to handle default arguments
 void bma180::begin(byte dev_addr)
@@ -39,6 +26,24 @@ void bma180::begin()
     bma180::begin(0x40, true);
 }
 
+
+void bma180::reset()
+{
+    // Reset the device to get it to "known" state
+    bw_tcs = ctrl_reg_3 = offset_lsb1 = 0;
+    bma180::write(0x10, 0xB6);
+    delayMicroseconds(20);
+    
+    // TODO: Make a single pointer-array and use read_many to access consequtive registers ?
+    bma180::read(0x20, &bw_tcs);
+    bma180::read(0x21, &ctrl_reg_3);
+    // WTF: If I do not read the offset_lsb1 values here the later manipulation methods will get wrong value!
+    Serial.print("bma180::reset(): offset_lsb1 before: B");
+    Serial.println(offset_lsb1, BIN);
+    bma180::read_many(0x35, 1, &offset_lsb1);
+    Serial.print("bma180::reset(): offset_lsb1 after: B");
+    Serial.println(offset_lsb1, BIN);
+}
 
 // Shorthand helpers for writing various registers
 void bma180::set_ee_w(boolean enable)
