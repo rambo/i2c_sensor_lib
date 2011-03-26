@@ -40,7 +40,7 @@ void i2c_accelerometer::push_to_smoothing_buffer(int val_x, int val_y, int val_z
 
 void i2c_accelerometer::smooth()
 {
-    // Naive smoothing for now
+    // This averaging in an array might use too much memory (and is not exactly a Kalman filter either), ponder alternatives
     byte d = smoothing_buffer[0].count();
     byte div = d;
     //long temp_buffer[3] = {0,0,0};

@@ -28,6 +28,8 @@ class i2c_sensor
 
         void dump_registers(byte addr_start, byte addr_end);
 
+        // TODO: Make method(s) to read-modify-write a register with a specific mask, at some point keeping copies of all registers we wish to manipulate in memory will get expensive
+
     protected:
         byte device_address;
         // PONDER: These might be better not be defined here (if overloading is b0rked or something
