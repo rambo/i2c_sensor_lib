@@ -4,13 +4,13 @@
 #define SimpleFIFO_NONVOLATILE
 #include <SimpleFIFO.h> 
 
-#include "bma180.h"
+#include "dummy_accelerometer.h"
 
 #define DISABLE_PCINT_MULTI_SERVICE
 #include <PinChangeInt.h>
 
 
-bma180 sensor;
+dummy_accelerometer sensor;
 int smoothed_data[3];
 
 
@@ -74,7 +74,7 @@ void setup()
 
 void loop()
 {
-    if (read_sensor_flag)
+    if (read_sensor_flag or true)
     {
         sensor.read_sensor_data();
         read_sensor_flag = false;
