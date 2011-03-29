@@ -31,7 +31,7 @@ class bma180 : public i2c_accelerometer
         // 2 byte endian marker
         // 6 byte buffer for saving data read from the device
         // 2 byte checksum in case there is a reset in the middle of a packet.
-        volatile int last_data_buffer[5];
+        int last_data_buffer[5];
 
 };
 

@@ -4,6 +4,7 @@
 #include <WProgram.h> 
 #include "i2c_sensor.h"
 #include <Wire.h>
+#define SimpleFIFO_NONVOLATILE
 #include <SimpleFIFO.h> 
 
 
@@ -25,7 +26,7 @@ class i2c_accelerometer : public i2c_sensor
         // The SimpleFIFO is volatile, I wonder if I should make a non-volatile version too ?
         SimpleFIFO<int,I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE> smoothing_buffer[3]; // One SimpleFIFO for each channel
         // This probably does not need to be volatile since we can't do I2C operations inside interrupts anyway...
-        volatile int last_data_buffer[3];
+        int last_data_buffer[3];
         int smoothed_buffer[3];
         // PONDER: define this (and the simplefifo above) in parent class too ?
         void push_to_smoothing_buffer(int val_x, int val_y, int val_z);

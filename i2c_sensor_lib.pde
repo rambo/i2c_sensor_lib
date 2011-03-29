@@ -1,6 +1,7 @@
-// If this is not here we get compile error on i2c_sensor.h
+// If this is not here we get compile error on i2c_sensor.h (WTF!)
 #include <Wire.h>
-// If this is not here we get a compile error on i2c_accelerometer.h
+// If this is not here we get a compile error on i2c_accelerometer.h (WTF!)
+#define SimpleFIFO_NONVOLATILE
 #include <SimpleFIFO.h> 
 
 #include "bma180.h"
