@@ -71,6 +71,7 @@ boolean i2c_sensor::read_many(byte address, byte req_num, byte *target)
         // First assign the return of Wire.receive to where the pointer points to, then incement the pointer (so in next iteration we write to correct place)
         *(target++) = Wire.receive();
     }
+    return true;
 }
 
 
@@ -94,6 +95,37 @@ boolean i2c_sensor::write_many(byte address, byte num, byte *source)
     return true;
 }
 
+boolean i2c_sensor::read_modify_write(byte address, byte mask, byte value)
+{
+    byte tmp;
+    if (!i2c_sensor::read(address, &tmp))
+    {
+        return false;
+    }
+    /*
+    Serial.print("BEFORE: reg 0x");
+    Serial.print(address, HEX);
+    Serial.print(" value: 0x");
+    Serial.print(tmp, HEX);
+    Serial.print("\tB");
+    Serial.println(tmp, BIN);
+    Serial.print("MASK: B");
+    Serial.print(mask, BIN);
+    Serial.print("\tVALUE: B");
+    Serial.println(value, BIN);
+    */
+    tmp = (tmp & mask) | value;
+    /*
+    Serial.print("AFTER: reg 0x");
+    Serial.print(address, HEX);
+    Serial.print(" value: 0x");
+    Serial.print(tmp, HEX);
+    Serial.print("\tB");
+    Serial.println(tmp, BIN);
+    */
+    return i2c_sensor::write_many(address, 1, &tmp);
+}
+
 
 void i2c_sensor::dump_registers(byte addr_start, byte addr_end)
 {
@@ -111,5 +143,7 @@ void i2c_sensor::dump_registers(byte addr_start, byte addr_end)
         Serial.println(tmp, BIN);
     }
 }
+
+
 
 

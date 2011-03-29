@@ -17,16 +17,6 @@ void i2c_accelerometer::begin(byte dev_addr, boolean wire_begin)
 
 void i2c_accelerometer::push_to_smoothing_buffer(int val_x, int val_y, int val_z)
 {
-    /*
-    Serial.print("push_to_smoothing_buffer()\t");
-    Serial.print(val_x, DEC);
-    Serial.print('\t');
-    Serial.print(val_y, DEC);
-    Serial.print('\t');
-    Serial.println(val_z, DEC);
-    */
-    // Scrap old values if buffer fills
-    // TODO: rewrite to check the return value of the enqueue (should save one method call...)
     if (smoothing_buffer[0].count() == I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE)
     {
         smoothing_buffer[0].dequeue();    

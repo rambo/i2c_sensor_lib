@@ -25,6 +25,7 @@ class i2c_sensor
         boolean write(byte address, byte value);
         // Write N values from a target (usually an array)
         boolean write_many(byte address, byte num, byte *source);
+        boolean read_modify_write(byte address, byte mask, byte value);
 
         void dump_registers(byte addr_start, byte addr_end);
 

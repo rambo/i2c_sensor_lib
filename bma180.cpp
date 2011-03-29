@@ -30,19 +30,8 @@ void bma180::begin()
 void bma180::reset()
 {
     // Reset the device to get it to "known" state
-    bw_tcs = ctrl_reg_3 = offset_lsb1 = 0;
     bma180::write(0x10, 0xB6);
     delayMicroseconds(20);
-    
-    // TODO: Make a single pointer-array and use read_many to access consequtive registers ?
-    bma180::read(0x20, &bw_tcs);
-    bma180::read(0x21, &ctrl_reg_3);
-    // WTF: If I do not read the offset_lsb1 values here the later manipulation methods will get wrong value!
-    Serial.print("bma180::reset(): offset_lsb1 before: B");
-    Serial.println(offset_lsb1, BIN);
-    bma180::read_many(0x35, 1, &offset_lsb1);
-    Serial.print("bma180::reset(): offset_lsb1 after: B");
-    Serial.println(offset_lsb1, BIN);
 }
 
 // Shorthand helpers for writing various registers
@@ -58,39 +47,9 @@ void bma180::set_ee_w(boolean enable)
     }
     ee_w = enable;
 }
-void bma180::write_ctrl_reg_3()
-{
-    if (!ee_w)
-    {
-         bma180::set_ee_w(true);
-    }
-    bma180::write(0x21, ctrl_reg_3);
 
-}
-void bma180::write_bw_tcs()
+boolean bma180::set_range(byte range)
 {
-    if (!ee_w)
-    {
-         bma180::set_ee_w(true);
-    }
-    bma180::write(0x20, bw_tcs);
-}
-void bma180::write_offset_lsb1()
-{
-    if (!ee_w)
-    {
-         bma180::set_ee_w(true);
-    }
-    bma180::write(0x35, offset_lsb1);
-}
-
-
-void bma180::set_range(byte range)
-{
-    Serial.print("range: B");
-    Serial.println(range, BIN);
-    Serial.print("bma180::set_range(): offset_lsb1 before: B");
-    Serial.println(offset_lsb1, BIN);
     switch (range)
     {
         case B000: // 1g
@@ -100,27 +59,21 @@ void bma180::set_range(byte range)
         case B100: // 4g
         case B101: // 8g
         case B110: // 16g
-            offset_lsb1 = (offset_lsb1 & B11110001) | range << 1;
+            if (!ee_w)
+            {
+                 bma180::set_ee_w(true);
+            }
+            return i2c_sensor::read_modify_write(0x35, B11110001, range << 1);
           break;
         default:
           Serial.print("Invalid value B");
           Serial.println(range, BIN);
-          return;
+          return false;
     }
-    Serial.print("bma180::set_range(): offset_lsb1 after: B");
-    Serial.println(offset_lsb1, BIN);
-    bma180::write_offset_lsb1();
 }
 
-void bma180::set_bandwidth(byte bw)
+boolean bma180::set_bandwidth(byte bw)
 {
-    /*
-    Serial.print("bw: B");
-    Serial.println(bw, BIN);
-
-    Serial.print("bw_tcs before: B");
-    Serial.println(bw_tcs, BIN);
-    */
     switch (bw)
     {
         case B0000: // 10Hz
@@ -133,58 +86,37 @@ void bma180::set_bandwidth(byte bw)
         case B0111: // 1200Hz
         case B1000: // High-pass: 1Hz
         case B1001: // Band-pass: 0.2Hz - 300Hz
-            bw_tcs = (bw_tcs & B00001111) | bw << 4;
+            if (!ee_w)
+            {
+                 bma180::set_ee_w(true);
+            }
+            return i2c_sensor::read_modify_write(0x20, B00001111, bw << 4);
+            delayMicroseconds(10);
           break;
         default:
           Serial.print("Invalid value B");
           Serial.println(bw, BIN);
-          return;
+          return false;
     }
-    /*
-    Serial.print("bw_tcs after: B");
-    Serial.println(bw_tcs, BIN);
-    */
-    bma180::write_bw_tcs();
-    delayMicroseconds(10);
 }
 
 
-void bma180::set_new_data_interrupt(boolean enable)
+boolean bma180::set_new_data_interrupt(boolean enable)
 {
-    /*
-    Serial.print("ctrl_reg_3 before: B");
-    Serial.println(ctrl_reg_3, BIN);
-    */
-    if (enable)
+    if (!ee_w)
     {
-        ctrl_reg_3 |= B00000010;
+         bma180::set_ee_w(true);
     }
-    else
-    {
-        ctrl_reg_3 &= B11111101;
-    }
-    /*
-    Serial.print("ctrl_reg_3 after: B");
-    Serial.println(ctrl_reg_3, BIN);
-    */
-    bma180::write_ctrl_reg_3();
+    return i2c_sensor::read_modify_write(0x21, B11111101, (enable & B00000001) << 1);
 }
 
-void bma180::set_smp_skip(boolean enable)
+boolean bma180::set_smp_skip(boolean enable)
 {
-    Serial.print("bma180::set_smp_skip(): offset_lsb1 before: B");
-    Serial.println(offset_lsb1, BIN);
-    if (enable)
+    if (!ee_w)
     {
-        offset_lsb1 |= B00000001;
+         bma180::set_ee_w(true);
     }
-    else
-    {
-        offset_lsb1 &= B11111110;
-    }
-    Serial.print("bma180::set_smp_skip(): offset_lsb1 after: B");
-    Serial.println(offset_lsb1, BIN);
-    bma180::write_offset_lsb1();
+    return i2c_sensor::read_modify_write(0x35, B1111110, (enable & B00000001));
 }
 
 

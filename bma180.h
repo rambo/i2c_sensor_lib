@@ -20,10 +20,10 @@ class bma180 : public i2c_accelerometer
         void begin();
         // do a soft-reset for the chip and re-read the config registers
         void reset();
-        void set_new_data_interrupt(boolean enable);
-        void set_smp_skip(boolean enable);
-        void set_bandwidth(byte bw);
-        void set_range(byte range);
+        boolean set_new_data_interrupt(boolean enable);
+        boolean set_smp_skip(boolean enable);
+        boolean set_bandwidth(byte bw);
+        boolean set_range(byte range);
 
     protected:
         boolean ee_w;
@@ -32,12 +32,6 @@ class bma180 : public i2c_accelerometer
         // 6 byte buffer for saving data read from the device
         // 2 byte checksum in case there is a reset in the middle of a packet.
         volatile int last_data_buffer[5];
-        byte ctrl_reg_3;
-        void write_ctrl_reg_3();
-        byte bw_tcs;
-        void write_bw_tcs();
-        byte offset_lsb1;
-        void write_offset_lsb1();
 
 };
 
