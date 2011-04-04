@@ -10,7 +10,7 @@
 #include <PinChangeInt.h>
 
 
-dummy_accelerometer sensor;
+bma180 sensor;
 int smoothed_data[3];
 
 
@@ -74,7 +74,7 @@ void setup()
 
 void loop()
 {
-    if (read_sensor_flag or true)
+    if (read_sensor_flag)
     {
         sensor.read_sensor_data();
         read_sensor_flag = false;
