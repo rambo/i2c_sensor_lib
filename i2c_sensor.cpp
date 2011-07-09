@@ -98,7 +98,7 @@ boolean i2c_sensor::write_many(byte address, byte num, byte *source)
 boolean i2c_sensor::read_modify_write(byte address, byte mask, byte value)
 {
     byte tmp;
-    if (!i2c_sensor::read(address, &tmp))
+    if (!i2c_sensor::read_many(address, 1, &tmp))
     {
         return false;
     }
@@ -132,7 +132,10 @@ void i2c_sensor::dump_registers(byte addr_start, byte addr_end)
     byte tmp;
     for (byte addr = addr_start; addr <= addr_end; addr++)
     {
-        i2c_sensor::read(addr, &tmp);
+        if (!i2c_sensor::read(addr, &tmp))
+        {
+            continue;
+        }
         Serial.print("dev 0x");
         Serial.print(device_address, HEX);
         Serial.print(" reg 0x");
