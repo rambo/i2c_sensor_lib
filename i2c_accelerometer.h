@@ -1,7 +1,7 @@
 // safety againts double-include
 #ifndef i2c_accelerometer_h
 #define i2c_accelerometer_h
-#include <WProgram.h> 
+#include <Arduino.h> 
 #include "i2c_sensor.h"
 #include <Wire.h>
 #define SimpleFIFO_NONVOLATILE

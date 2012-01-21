@@ -1,7 +1,7 @@
 // safety againts double-include
 #ifndef dummy_accelerometer_h
 #define dummy_accelerometer_h
-#include <WProgram.h>
+#include <Arduino.h>
 #include "i2c_accelerometer.h"
 #include <Wire.h>
 

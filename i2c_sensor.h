@@ -1,7 +1,7 @@
 // safety againts double-include
 #ifndef i2c_sensor_h
 #define i2c_sensor_h
-#include <WProgram.h> 
+#include <Arduino.h> 
 #include <Wire.h>
 
 

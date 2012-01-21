@@ -1,6 +1,6 @@
 #ifndef filter_h
 #define filter_h
-#include <WProgram.h>
+#include <Arduino.h>
 
 
 #endif

@@ -1,7 +1,7 @@
 // safety againts double-include
 #ifndef bma180_h
 #define bma180_h
-#include <WProgram.h>
+#include <Arduino.h>
 #include "i2c_accelerometer.h"
 #include <Wire.h>
 
