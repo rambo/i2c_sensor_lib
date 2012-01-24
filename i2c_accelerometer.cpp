@@ -10,7 +10,7 @@ i2c_accelerometer::~i2c_accelerometer()
 {
 }
 
-void i2c_accelerometer::begin(byte dev_addr, boolean wire_begin)
+void i2c_accelerometer::begin(uint8_t dev_addr, uint8_t wire_begin)
 {
     i2c_sensor::begin(dev_addr, wire_begin);
 }
@@ -31,8 +31,8 @@ void i2c_accelerometer::push_to_smoothing_buffer(int val_x, int val_y, int val_z
 void i2c_accelerometer::smooth()
 {
     // This averaging in an array might use too much memory (and is not exactly a Kalman filter either), ponder alternatives
-    byte d = smoothing_buffer[0].count();
-    byte div = d;
+    uint8_t d = smoothing_buffer[0].count();
+    uint8_t div = d;
     //long temp_buffer[3] = {0,0,0};
     long temp_buffer[3] = {smoothed_buffer[0], smoothed_buffer[1], smoothed_buffer[2]};
     while (d-- > 0)

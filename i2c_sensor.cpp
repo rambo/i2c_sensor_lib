@@ -10,7 +10,7 @@ i2c_sensor::~i2c_sensor()
 {
 }
 
-void i2c_sensor::begin(byte dev_addr, boolean wire_begin)
+void i2c_sensor::begin(uint8_t dev_addr, uint8_t wire_begin)
 {
     device_address = dev_addr;
     if (wire_begin)
@@ -30,24 +30,24 @@ void i2c_sensor::read_sensor_data()
 }
 
 
-boolean i2c_sensor::read(byte address, byte *target)
+uint8_t i2c_sensor::read(uint8_t address, byte *target)
 {
     return i2c_sensor::read_many(address, 1, target);
 }
-byte i2c_sensor::read(byte address)
+uint8_t i2c_sensor::read(byte address)
 {
-    byte target;
+    uint8_t target;
     i2c_sensor::read_many(address, 1, &target);
     return target;
 }
 
 
 
-boolean i2c_sensor::read_many(byte address, byte req_num, byte *target)
+uint8_t i2c_sensor::read_many(uint8_t address, byte req_num, byte *target)
 {
     Wire.beginTransmission(device_address);
     Wire.send(address);
-    byte result = Wire.endTransmission();
+    uint8_t result = Wire.endTransmission();
     if (result > 0)
     {
         Serial.print("DEBUG: Read failed, Wire.endTransmission returned: ");
@@ -55,7 +55,7 @@ boolean i2c_sensor::read_many(byte address, byte req_num, byte *target)
         return false;
     }
     Wire.requestFrom(device_address, req_num);
-    byte recv_num =  Wire.available();
+    uint8_t recv_num =  Wire.available();
     if (recv_num != req_num)
     {
         // Unexpected amount of data to be received, clear the buffers and return failure
@@ -75,17 +75,17 @@ boolean i2c_sensor::read_many(byte address, byte req_num, byte *target)
 }
 
 
-boolean i2c_sensor::write(byte address, byte value)
+uint8_t i2c_sensor::write(uint8_t address, byte value)
 {
     return i2c_sensor::write_many(address, 1, &value);
 }
 
-boolean i2c_sensor::write_many(byte address, byte num, byte *source)
+uint8_t i2c_sensor::write_many(uint8_t address, byte num, byte *source)
 {
     Wire.beginTransmission(device_address);
     Wire.send(address);
     Wire.send(source, num);
-    byte result = Wire.endTransmission();
+    uint8_t result = Wire.endTransmission();
     if (result > 0)
     {
         Serial.print("DEBUG: Write failed, Wire.endTransmission returned: ");
@@ -95,9 +95,9 @@ boolean i2c_sensor::write_many(byte address, byte num, byte *source)
     return true;
 }
 
-boolean i2c_sensor::read_modify_write(byte address, byte mask, byte value)
+uint8_t i2c_sensor::read_modify_write(uint8_t address, byte mask, byte value)
 {
-    byte tmp;
+    uint8_t tmp;
     if (!i2c_sensor::read_many(address, 1, &tmp))
     {
         return false;
@@ -127,10 +127,10 @@ boolean i2c_sensor::read_modify_write(byte address, byte mask, byte value)
 }
 
 
-void i2c_sensor::dump_registers(byte addr_start, byte addr_end)
+void i2c_sensor::dump_registers(uint8_t addr_start, byte addr_end)
 {
-    byte tmp;
-    for (byte addr = addr_start; addr <= addr_end; addr++)
+    uint8_t tmp;
+    for (uint8_t addr = addr_start; addr <= addr_end; addr++)
     {
         if (!i2c_sensor::read(addr, &tmp))
         {

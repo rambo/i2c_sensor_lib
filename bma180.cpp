@@ -10,14 +10,14 @@ bma180::~bma180()
 {
 }
 
-void bma180::begin(byte dev_addr, boolean wire_begin)
+void bma180::begin(uint8_t dev_addr, uint8_t wire_begin)
 {
     i2c_accelerometer::begin(dev_addr, wire_begin);
     // do a soft-reset of the chip
     bma180::reset();
 }
 // Funky way to handle default arguments
-void bma180::begin(byte dev_addr)
+void bma180::begin(uint8_t dev_addr)
 {
     bma180::begin(dev_addr, true);
 }
@@ -35,7 +35,7 @@ void bma180::reset()
 }
 
 // Shorthand helpers for writing various registers
-void bma180::set_ee_w(boolean enable)
+void bma180::set_ee_w(uint8_t enable)
 {
     if (enable)
     {
@@ -48,7 +48,7 @@ void bma180::set_ee_w(boolean enable)
     ee_w = enable;
 }
 
-boolean bma180::set_range(byte range)
+uint8_t bma180::set_range(uint8_t range)
 {
     switch (range)
     {
@@ -72,7 +72,7 @@ boolean bma180::set_range(byte range)
     }
 }
 
-boolean bma180::set_bandwidth(byte bw)
+uint8_t bma180::set_bandwidth(uint8_t bw)
 {
     switch (bw)
     {
@@ -101,7 +101,7 @@ boolean bma180::set_bandwidth(byte bw)
 }
 
 
-boolean bma180::set_new_data_interrupt(boolean enable)
+uint8_t bma180::set_new_data_interrupt(boolean enable)
 {
     if (!ee_w)
     {
@@ -110,7 +110,7 @@ boolean bma180::set_new_data_interrupt(boolean enable)
     return i2c_sensor::read_modify_write(0x21, B11111101, (enable & B00000001) << 1);
 }
 
-boolean bma180::set_smp_skip(boolean enable)
+uint8_t bma180::set_smp_skip(boolean enable)
 {
     if (!ee_w)
     {
@@ -125,7 +125,7 @@ void bma180::read_sensor_data()
     // TODO: Use only 3 item array, the checksum and the endiannes tag (copied from an old example) are useless here
     int last_data_buffer[5] = {0x8081, 0, 0, 0, 0};
     // PONDER: Why does not bma180::read_many work here ?
-    i2c_sensor::read_many(0x02, 6, (byte*)(last_data_buffer+1)); // Cast the pointer to the first element of the array to a byte and increment by one
+    i2c_sensor::read_many(0x02, 6, (uint8_t*)(last_data_buffer+1)); // Cast the pointer to the first element of the array to a byte and increment by one
     // Calculate checksum
     last_data_buffer[4] = last_data_buffer[1] + last_data_buffer[2] + last_data_buffer[3];
     // Remove the status bits from the data values

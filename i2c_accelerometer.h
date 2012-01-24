@@ -18,7 +18,7 @@ class i2c_accelerometer : public i2c_sensor
     public:
         i2c_accelerometer();
         ~i2c_accelerometer();
-        void begin(byte dev_addr, boolean wire_begin);
+        void begin(uint8_t dev_addr, uint8_t wire_begin);
         void smooth();
         void get_last_smoothed(int *target);
     

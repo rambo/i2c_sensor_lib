@@ -10,14 +10,14 @@ dummy_accelerometer::~dummy_accelerometer()
 {
 }
 
-void dummy_accelerometer::begin(byte dev_addr, boolean wire_begin)
+void dummy_accelerometer::begin(uint8_t dev_addr, uint8_t wire_begin)
 {
 //    i2c_accelerometer::begin(dev_addr, wire_begin);
     // do a soft-reset of the chip
     dummy_accelerometer::reset();
 }
 // Funky way to handle default arguments
-void dummy_accelerometer::begin(byte dev_addr)
+void dummy_accelerometer::begin(uint8_t dev_addr)
 {
     dummy_accelerometer::begin(dev_addr, true);
 }
@@ -45,7 +45,7 @@ void dummy_accelerometer::reset()
 }
 
 // Shorthand helpers for writing various registers
-void dummy_accelerometer::set_ee_w(boolean enable)
+void dummy_accelerometer::set_ee_w(uint8_t enable)
 {
     if (enable)
     {
@@ -84,7 +84,7 @@ void dummy_accelerometer::write_offset_lsb1()
 }
 
 
-void dummy_accelerometer::set_range(byte range)
+void dummy_accelerometer::set_range(uint8_t range)
 {
     Serial.print("range: B");
     Serial.println(range, BIN);
@@ -111,7 +111,7 @@ void dummy_accelerometer::set_range(byte range)
     dummy_accelerometer::write_offset_lsb1();
 }
 
-void dummy_accelerometer::set_bandwidth(byte bw)
+void dummy_accelerometer::set_bandwidth(uint8_t bw)
 {
     /*
     Serial.print("bw: B");
@@ -148,7 +148,7 @@ void dummy_accelerometer::set_bandwidth(byte bw)
 }
 
 
-void dummy_accelerometer::set_new_data_interrupt(boolean enable)
+void dummy_accelerometer::set_new_data_interrupt(uint8_t enable)
 {
     /*
     Serial.print("ctrl_reg_3 before: B");
@@ -169,7 +169,7 @@ void dummy_accelerometer::set_new_data_interrupt(boolean enable)
     dummy_accelerometer::write_ctrl_reg_3();
 }
 
-void dummy_accelerometer::set_smp_skip(boolean enable)
+void dummy_accelerometer::set_smp_skip(uint8_t enable)
 {
     Serial.print("dummy_accelerometer::set_smp_skip(): offset_lsb1 before: B");
     Serial.println(offset_lsb1, BIN);
@@ -194,7 +194,7 @@ void dummy_accelerometer::read_sensor_data()
     int last_data_buffer[5] = {0x8081, 0x800, 0x800, 0x800, 0};
 	/*
     // PONDER: Why does not dummy_accelerometer::read_many work here ?
-    dummy_accelerometer::read_many(0x02, 6, (byte*)(last_data_buffer+1)); // Cast the pointer to the first element of the array to a byte and increment by one
+    dummy_accelerometer::read_many(0x02, 6, (uint8_t*)(last_data_buffer+1)); // Cast the pointer to the first element of the array to a byte and increment by one
     // Calculate checksum
     last_data_buffer[4] = last_data_buffer[1] + last_data_buffer[2] + last_data_buffer[3];
     // Remove the status bits from the data values
@@ -207,37 +207,37 @@ void dummy_accelerometer::read_sensor_data()
 }
 
 /*
-byte dummy_accelerometer::read(byte address)
+uint8_t dummy_accelerometer::read(byte address)
 {
     return 0;
 }
 */
 
-boolean dummy_accelerometer::read(byte address, byte *target) {
+uint8_t dummy_accelerometer::read(uint8_t address, byte *target) {
   return true;
 }
 
 
-boolean dummy_accelerometer::read_many(byte address, byte req_num, byte *target)
+uint8_t dummy_accelerometer::read_many(uint8_t address, byte req_num, byte *target)
 {
 	return true;
 }
 
 
-boolean dummy_accelerometer::write(byte address, byte value)
+uint8_t dummy_accelerometer::write(uint8_t address, byte value)
 {
     Serial.println("dummy_accelerometer::write");
     return true;
 }
 
-boolean dummy_accelerometer::write_many(byte address, byte num, byte *source)
+uint8_t dummy_accelerometer::write_many(uint8_t address, byte num, byte *source)
 {
     Serial.println("dummy_accelerometer::write_many");
     return true;
 }
 
 
-void dummy_accelerometer::dump_registers(byte addr_start, byte addr_end)
+void dummy_accelerometer::dump_registers(uint8_t addr_start, byte addr_end)
 {
     Serial.println("dummy_accelerometer::dump_registers");
     return;
