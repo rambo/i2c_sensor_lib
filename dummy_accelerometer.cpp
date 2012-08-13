@@ -37,10 +37,10 @@ void dummy_accelerometer::reset()
     dummy_accelerometer::read(0x20, &bw_tcs);
     dummy_accelerometer::read(0x21, &ctrl_reg_3);
     // WTF: If I do not read the offset_lsb1 values here the later manipulation methods will get wrong value!
-    Serial.print("dummy_accelerometer::reset(): offset_lsb1 before: B");
+    Serial.print(F("dummy_accelerometer::reset(): offset_lsb1 before: B"));
     Serial.println(offset_lsb1, BIN);
     dummy_accelerometer::read_many(0x35, 1, &offset_lsb1);
-    Serial.print("dummy_accelerometer::reset(): offset_lsb1 after: B");
+    Serial.print(F("dummy_accelerometer::reset(): offset_lsb1 after: B"));
     Serial.println(offset_lsb1, BIN);
 }
 
@@ -86,9 +86,9 @@ void dummy_accelerometer::write_offset_lsb1()
 
 void dummy_accelerometer::set_range(uint8_t range)
 {
-    Serial.print("range: B");
+    Serial.print(F("range: B"));
     Serial.println(range, BIN);
-    Serial.print("dummy_accelerometer::set_range(): offset_lsb1 before: B");
+    Serial.print(F("dummy_accelerometer::set_range(): offset_lsb1 before: B"));
     Serial.println(offset_lsb1, BIN);
     switch (range)
     {
@@ -102,11 +102,11 @@ void dummy_accelerometer::set_range(uint8_t range)
             offset_lsb1 = (offset_lsb1 & B11110001) | range << 1;
           break;
         default:
-          Serial.print("Invalid value B");
+          Serial.print(F("Invalid value B"));
           Serial.println(range, BIN);
           return;
     }
-    Serial.print("dummy_accelerometer::set_range(): offset_lsb1 after: B");
+    Serial.print(F("dummy_accelerometer::set_range(): offset_lsb1 after: B"));
     Serial.println(offset_lsb1, BIN);
     dummy_accelerometer::write_offset_lsb1();
 }
@@ -114,10 +114,10 @@ void dummy_accelerometer::set_range(uint8_t range)
 void dummy_accelerometer::set_bandwidth(uint8_t bw)
 {
     /*
-    Serial.print("bw: B");
+    Serial.print(F("bw: B"));
     Serial.println(bw, BIN);
 
-    Serial.print("bw_tcs before: B");
+    Serial.print(F("bw_tcs before: B"));
     Serial.println(bw_tcs, BIN);
     */
     switch (bw)
@@ -135,12 +135,12 @@ void dummy_accelerometer::set_bandwidth(uint8_t bw)
             bw_tcs = (bw_tcs & B00001111) | bw << 4;
           break;
         default:
-          Serial.print("Invalid value B");
+          Serial.print(F("Invalid value B"));
           Serial.println(bw, BIN);
           return;
     }
     /*
-    Serial.print("bw_tcs after: B");
+    Serial.print(F("bw_tcs after: B"));
     Serial.println(bw_tcs, BIN);
     */
     dummy_accelerometer::write_bw_tcs();
@@ -151,7 +151,7 @@ void dummy_accelerometer::set_bandwidth(uint8_t bw)
 void dummy_accelerometer::set_new_data_interrupt(uint8_t enable)
 {
     /*
-    Serial.print("ctrl_reg_3 before: B");
+    Serial.print(F("ctrl_reg_3 before: B"));
     Serial.println(ctrl_reg_3, BIN);
     */
     if (enable)
@@ -163,7 +163,7 @@ void dummy_accelerometer::set_new_data_interrupt(uint8_t enable)
         ctrl_reg_3 &= B11111101;
     }
     /*
-    Serial.print("ctrl_reg_3 after: B");
+    Serial.print(F("ctrl_reg_3 after: B"));
     Serial.println(ctrl_reg_3, BIN);
     */
     dummy_accelerometer::write_ctrl_reg_3();
@@ -171,7 +171,7 @@ void dummy_accelerometer::set_new_data_interrupt(uint8_t enable)
 
 void dummy_accelerometer::set_smp_skip(uint8_t enable)
 {
-    Serial.print("dummy_accelerometer::set_smp_skip(): offset_lsb1 before: B");
+    Serial.print(F("dummy_accelerometer::set_smp_skip(): offset_lsb1 before: B"));
     Serial.println(offset_lsb1, BIN);
     if (enable)
     {
@@ -181,7 +181,7 @@ void dummy_accelerometer::set_smp_skip(uint8_t enable)
     {
         offset_lsb1 &= B11111110;
     }
-    Serial.print("dummy_accelerometer::set_smp_skip(): offset_lsb1 after: B");
+    Serial.print(F("dummy_accelerometer::set_smp_skip(): offset_lsb1 after: B"));
     Serial.println(offset_lsb1, BIN);
     dummy_accelerometer::write_offset_lsb1();
 }
@@ -226,20 +226,20 @@ uint8_t dummy_accelerometer::read_many(uint8_t address, byte req_num, byte *targ
 
 uint8_t dummy_accelerometer::write(uint8_t address, byte value)
 {
-    Serial.println("dummy_accelerometer::write");
+    Serial.println(F("dummy_accelerometer::write"));
     return true;
 }
 
 uint8_t dummy_accelerometer::write_many(uint8_t address, byte num, byte *source)
 {
-    Serial.println("dummy_accelerometer::write_many");
+    Serial.println(F("dummy_accelerometer::write_many"));
     return true;
 }
 
 
 void dummy_accelerometer::dump_registers(uint8_t addr_start, byte addr_end)
 {
-    Serial.println("dummy_accelerometer::dump_registers");
+    Serial.println(F("dummy_accelerometer::dump_registers"));
     return;
 }
 

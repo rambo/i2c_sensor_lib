@@ -20,7 +20,7 @@ int foo;
 
 void read_bm180_data()
 {
-    //Serial.println("read_bm180_data() called");
+    //Serial.println(F("read_bm180_data() called"));
     read_sensor_flag = true;
 }
 
@@ -30,25 +30,25 @@ void setup()
     Serial.flush();
     
     /*
-    Serial.print("I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE=");
+    Serial.print(F("I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE="));
     Serial.println(I2C_ACCELEROMETER_SMOOTH_BUFFER_SIZE, DEC);
     */
 
-    Serial.println("Callign PCintPort::attachInterrupt()");
+    Serial.println(F("Callign PCintPort::attachInterrupt()"));
     pinMode(13, INPUT);
     PCintPort::attachInterrupt(13, &read_bm180_data, RISING);
-    Serial.println("PCintPort::attachInterrupt() done");
+    Serial.println(F("PCintPort::attachInterrupt() done"));
 
 
-    Serial.println("Calling sensor.begin()");
+    Serial.println(F("Calling sensor.begin()"));
     sensor.begin();
-    Serial.println("sensor.begin() done");
+    Serial.println(F("sensor.begin() done"));
 
     sensor.dump_registers(0x09, 0x0e);
     sensor.dump_registers(0x20, 0x25);
     sensor.dump_registers(0x32, 0x37);
 
-    Serial.println("Setting config variables");
+    Serial.println(F("Setting config variables"));
     sensor.set_bandwidth(B0000);
     delay(10);
     sensor.set_range(B010);
@@ -57,7 +57,7 @@ void setup()
     delay(10);
     sensor.set_new_data_interrupt(true);
     delay(10);
-    Serial.println("Setting config variables done");
+    Serial.println(F("Setting config variables done"));
 
     sensor.dump_registers(0x09, 0x0e);
     sensor.dump_registers(0x20, 0x25);
@@ -68,7 +68,7 @@ void setup()
     
     // Wait a moment so that everything settles.
     delay(10);
-    Serial.println("setup() done");
+    Serial.println(F("setup() done"));
 }
 
 

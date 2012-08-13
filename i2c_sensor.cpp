@@ -50,7 +50,7 @@ uint8_t i2c_sensor::read_many(uint8_t address, byte req_num, byte *target)
     uint8_t result = Wire.endTransmission();
     if (result > 0)
     {
-        Serial.print("DEBUG: Read failed, Wire.endTransmission returned: ");
+        Serial.print(F("DEBUG: Read failed, Wire.endTransmission returned: "));
         Serial.println(result, DEC);
         return false;
     }
@@ -63,7 +63,7 @@ uint8_t i2c_sensor::read_many(uint8_t address, byte req_num, byte *target)
         {
             Wire.receive();
         }
-        Serial.println("DEBUG: Read failed, unexpected amount of data");
+        Serial.println(F("DEBUG: Read failed, unexpected amount of data"));
         return false;
     }
     while(recv_num-- > 0)
@@ -88,7 +88,7 @@ uint8_t i2c_sensor::write_many(uint8_t address, byte num, byte *source)
     uint8_t result = Wire.endTransmission();
     if (result > 0)
     {
-        Serial.print("DEBUG: Write failed, Wire.endTransmission returned: ");
+        Serial.print(F("DEBUG: Write failed, Wire.endTransmission returned: "));
         Serial.println(result, DEC);
         return false;
     }
@@ -103,24 +103,24 @@ uint8_t i2c_sensor::read_modify_write(uint8_t address, byte mask, byte value)
         return false;
     }
     /*
-    Serial.print("BEFORE: reg 0x");
+    Serial.print(F("BEFORE: reg 0x"));
     Serial.print(address, HEX);
-    Serial.print(" value: 0x");
+    Serial.print(F(" value: 0x"));
     Serial.print(tmp, HEX);
-    Serial.print("\tB");
+    Serial.print(F("\tB"));
     Serial.println(tmp, BIN);
-    Serial.print("MASK: B");
+    Serial.print(F("MASK: B"));
     Serial.print(mask, BIN);
-    Serial.print("\tVALUE: B");
+    Serial.print(F("\tVALUE: B"));
     Serial.println(value, BIN);
     */
     tmp = (tmp & mask) | value;
     /*
-    Serial.print("AFTER: reg 0x");
+    Serial.print(F("AFTER: reg 0x"));
     Serial.print(address, HEX);
-    Serial.print(" value: 0x");
+    Serial.print(F(" value: 0x"));
     Serial.print(tmp, HEX);
-    Serial.print("\tB");
+    Serial.print(F("\tB"));
     Serial.println(tmp, BIN);
     */
     return i2c_sensor::write_many(address, 1, &tmp);
@@ -136,13 +136,13 @@ void i2c_sensor::dump_registers(uint8_t addr_start, byte addr_end)
         {
             continue;
         }
-        Serial.print("dev 0x");
+        Serial.print(F("dev 0x"));
         Serial.print(device_address, HEX);
-        Serial.print(" reg 0x");
+        Serial.print(F(" reg 0x"));
         Serial.print(addr, HEX);
-        Serial.print(" value: 0x");
+        Serial.print(F(" value: 0x"));
         Serial.print(tmp, HEX);
-        Serial.print("\tB");
+        Serial.print(F("\tB"));
         Serial.println(tmp, BIN);
     }
 }

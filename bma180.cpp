@@ -66,7 +66,7 @@ uint8_t bma180::set_range(uint8_t range)
             return i2c_sensor::read_modify_write(0x35, B11110001, range << 1);
           break;
         default:
-          Serial.print("Invalid value B");
+          Serial.print(F("Invalid value B"));
           Serial.println(range, BIN);
           return false;
     }
@@ -94,7 +94,7 @@ uint8_t bma180::set_bandwidth(uint8_t bw)
             delayMicroseconds(10);
           break;
         default:
-          Serial.print("Invalid value B");
+          Serial.print(F("Invalid value B"));
           Serial.println(bw, BIN);
           return false;
     }
